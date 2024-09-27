@@ -9,16 +9,16 @@ from .forms import UserRegisterForm
 from .models import Product
 
 
-
+@login_required 
 def product_list(request):
     products = Product.objects.all()
     return render(request, 'product_list.html', {'products': products})
-
+@login_required 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     
     return render(request, 'product_detail.html', {'product': product})
-    
+@login_required     
 def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
     
@@ -58,7 +58,7 @@ def cart_view(request):
     cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.total_price for item in cart_items)
     return render(request, 'cart_view.html', {'cart_items': cart_items, 'total_price': total_price})
-
+@login_required 
 def order_list(request):
     orders = Order.objects.filter(user=request.user, total_price__gt=0).prefetch_related('products')
     return render(request, 'order_list.html', {'orders': orders})
